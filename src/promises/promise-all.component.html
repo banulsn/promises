@@ -1,7 +1,28 @@
-PROMISE ALL RESOLVE RESULT<br>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <div class="col-sm-12 text-center"><h5><b>PROMISE.ALL</b></h5></div>
+                <div class="row">
+                    <div class="col-sm-6 text-center">RESOLVE<br>
+                        <code>{{result | json}}</code>
+                    </div>
+                    <div class="col-sm-6 text-center">REJECT<br>
+                        <code>{{reason | json}}</code>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12 text-center"><h6>WITH ASYNC AWAIT</h6></div>
+                    <div class="col-sm-6 text-center">RESOLVE<br>
+                        <code>{{resultAsync | json}}</code>
+                    </div>
+                    <div class="col-sm-6 text-center">REJECT<br>
+                        <code>{{reasonAsync | json}}</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-{{result | json}}<br>
-
-PROMISE ALL REJECT REASON<br>
-
-{{reason | json}}
