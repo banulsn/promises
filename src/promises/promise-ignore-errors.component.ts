@@ -53,7 +53,7 @@ export class PromiseIgnoreErrorsComponent implements OnInit {
                         completedPromises++;
 
                         if (index === promises.length - 1) {
-                            resolve(results);
+                            resolve(results.filter((result) => result));
                         }
                     })
                     .catch((error) => {
