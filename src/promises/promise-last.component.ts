@@ -60,7 +60,6 @@ export class PromiseLastComponent implements OnInit {
             })
             .catch(() => {
               resolve(lastCompletedPromise);
-              completedPromises++
             });
       });
     });
