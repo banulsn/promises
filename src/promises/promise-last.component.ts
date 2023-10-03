@@ -21,7 +21,7 @@ export class PromiseLastComponent implements OnInit {
     this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(2));
     this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(4));
     this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(5));
-    this.arrayOfPromises.push(promiseThatRejectsAfterNSecondsGenerator(3));
+    // this.arrayOfPromises.push(promiseThatRejectsAfterNSecondsGenerator(3));
     this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(1));
 
     this.promiseLastRef = this.promiseLast(this.arrayOfPromises)
@@ -35,7 +35,7 @@ export class PromiseLastComponent implements OnInit {
   }
 
   // PROMISE.LAST FUNCTION
-  async promiseLast(promises) {
+  promiseLast(promises) {
     return new Promise((resolve, reject) => {
       if (!Array.isArray(promises)) {
         return reject('promises muszą być tablicą');
@@ -48,7 +48,7 @@ export class PromiseLastComponent implements OnInit {
         resolve([]);
       }
 
-      promises.forEach((promise, index) => {
+      promises.forEach((promise) => {
         Promise.resolve(promise)
             .then((result) => {
               lastCompletedPromise = result;
@@ -65,9 +65,37 @@ export class PromiseLastComponent implements OnInit {
     });
   }
 
+    async promiseLastUsingAsyncAwait(promises) {
+        if (!Array.isArray(promises)) {
+            return Promise.reject('promises muszą być tablicą');
+        }
+
+        let lastCompletedPromise = [];
+        let completedPromises = 0;
+
+        if (!promises.length) {
+            return Promise.resolve([]);
+        }
+
+        return new Promise((resolve) => {
+            promises.forEach(async (promise) => {
+                try {
+                    lastCompletedPromise = await Promise.resolve(promise);
+                    completedPromises++;
+                    if (completedPromises === promises.length) {
+                        return resolve(lastCompletedPromise);
+                    }
+                } catch (error) {
+                    return Promise.resolve(lastCompletedPromise);
+                }
+            })
+        });
+
+    }
+
   async promiseLastAsyncFn() {
     try {
-      this.resultAsync = await this.promiseLast(this.arrayOfPromises);
+      this.resultAsync = await this.promiseLastUsingAsyncAwait(this.arrayOfPromises);
     } catch (e) {
       this.reasonAsync = e;
     }

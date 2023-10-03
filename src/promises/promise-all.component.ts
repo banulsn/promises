@@ -21,9 +21,9 @@ export class PromiseAllComponent implements OnInit {
 
     ngOnInit(): void {
         this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(1));
-        this.arrayOfPromises.push(promiseThatRejectsAfterNSecondsGenerator(3));
-        this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(2));
+        // this.arrayOfPromises.push(promiseThatRejectsAfterNSecondsGenerator(3));
         this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(4));
+        this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(2));
 
         this.promiseAllRef = this.promiseAll(this.arrayOfPromises)
             .then(values => {
@@ -42,7 +42,7 @@ export class PromiseAllComponent implements OnInit {
     }
 
     // PROMISE.ALL FUNCTION
-    async promiseAll(promises) {
+    promiseAll(promises) {
         return new Promise((resolve, reject) => {
             if (!Array.isArray(promises)) {
                 return reject('promises muszą być tablicą');
@@ -72,9 +72,35 @@ export class PromiseAllComponent implements OnInit {
         });
     }
 
+    async promiseAllUsingAsyncAwait(promises) {
+        if (!Array.isArray(promises)) {
+            return Promise.reject('promises muszą być tablicą');
+        }
+
+        const results = [];
+        let completedPromises = 0;
+
+        if (!promises.length) {
+            return Promise.resolve(results);
+        }
+
+        for (let i = 0; i < promises.length; i++) {
+            try {
+                results[i] = await Promise.resolve(promises[i]);
+                completedPromises++;
+            } catch (error) {
+                return Promise.reject(error);
+            }
+        }
+
+        if (completedPromises === promises.length) {
+            return Promise.resolve(results);
+        }
+    }
+
     async promiseAllAsyncFn() {
         try {
-            this.resultAsync = await this.promiseAll(this.arrayOfPromises);
+            this.resultAsync = await this.promiseAllUsingAsyncAwait(this.arrayOfPromises);
         } catch (e) {
             this.reasonAsync = e;
         }

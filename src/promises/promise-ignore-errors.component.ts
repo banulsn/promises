@@ -19,9 +19,12 @@ export class PromiseIgnoreErrorsComponent implements OnInit {
 
     ngOnInit(): void {
         this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(1));
+        this.arrayOfPromises.push(promiseThatRejectsAfterNSecondsGenerator(0));
+        this.arrayOfPromises.push(promiseThatRejectsAfterNSecondsGenerator(1));
+        this.arrayOfPromises.push(promiseThatRejectsAfterNSecondsGenerator(2));
         this.arrayOfPromises.push(promiseThatRejectsAfterNSecondsGenerator(3));
-        this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(2));
         this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(4));
+        this.arrayOfPromises.push(promiseThatResolvesAfterNSecondsGenerator(2));
 
         this.promiseIgnoreErrorsRef = this.promiseIgnoreErrors(this.arrayOfPromises)
             .then(values => {
@@ -33,7 +36,7 @@ export class PromiseIgnoreErrorsComponent implements OnInit {
     }
 
     // PROMISE.IGNORE_ERRORS FUNCTION
-    async promiseIgnoreErrors(promises) {
+   promiseIgnoreErrors(promises) {
         return new Promise((resolve, reject) => {
             if (!Array.isArray(promises)) {
                 return reject('promises muszą być tablicą');
@@ -46,17 +49,49 @@ export class PromiseIgnoreErrorsComponent implements OnInit {
                 resolve(results);
             }
 
-            promises.forEach((promise, index) => {
+            promises.forEach((promise) => {
                 Promise.resolve(promise)
                     .then((result) => {
-                        results[index] = result;
+                        results.push(result);
                         completedPromises++;
 
-                        if (index === promises.length - 1) {
-                            resolve(results.filter((result) => result));
+                        if (completedPromises === promises.length) {
+                            resolve(results);
                         }
                     })
                     .catch((error) => {
+                        completedPromises++;
+                        console.log('Catch error in promiseIgnoreErrors: ', error)
+                    });
+            });
+        });
+    }
+
+    async promiseIgnoreErrorsUsingAsyncAwait(promises) {
+        return new Promise((resolve, reject) => {
+            if (!Array.isArray(promises)) {
+                return reject('promises muszą być tablicą');
+            }
+
+            const results = [];
+            let completedPromises = 0;
+
+            if (!promises.length) {
+                resolve(results);
+            }
+
+            promises.forEach((promise) => {
+                Promise.resolve(promise)
+                    .then((result) => {
+                        results.push(result);
+                        completedPromises++;
+
+                        if (completedPromises === promises.length) {
+                            resolve(results);
+                        }
+                    })
+                    .catch((error) => {
+                        completedPromises++;
                         console.log('Catch error in promiseIgnoreErrors: ', error)
                     });
             });
@@ -65,7 +100,7 @@ export class PromiseIgnoreErrorsComponent implements OnInit {
 
     async promiseIgnoreErrorsAsyncFn() {
         try {
-            this.resultAsync = await this.promiseIgnoreErrors(this.arrayOfPromises);
+            this.resultAsync = await this.promiseIgnoreErrorsUsingAsyncAwait(this.arrayOfPromises);
         } catch (e) {
             this.reasonAsync = e;
         }

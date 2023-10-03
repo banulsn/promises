@@ -39,7 +39,7 @@ export class PromiseRaceComponent implements OnInit {
   }
 
   // PROMISE.RACE FUNCTION
-  async promiseRace(promises) {
+  promiseRace(promises) {
     return new Promise((resolve, reject) => {
       if (!Array.isArray(promises)) {
         return reject('promises muszą być tablicą');
@@ -61,9 +61,29 @@ export class PromiseRaceComponent implements OnInit {
     });
   }
 
+  async promiseRaceUsingAsyncAwait(promises) {
+    if (!Array.isArray(promises)) {
+      return Promise.reject('promises muszą być tablicą');
+    }
+
+    if (!promises.length) {
+      return Promise.resolve([]);
+    }
+
+    return new Promise((resolve, reject) => {
+      promises.forEach(async (promise) => {
+        try {
+          resolve(await Promise.resolve(promise));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+
   async promiseRaceAsyncFn() {
     try {
-      this.resultAsync = await this.promiseRace(this.arrayOfPromises);
+      this.resultAsync = await this.promiseRaceUsingAsyncAwait(this.arrayOfPromises);
     } catch (e) {
       this.reasonAsync = e;
     }
