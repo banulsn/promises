@@ -69,32 +69,32 @@ export class PromiseIgnoreErrorsComponent implements OnInit {
 
     async promiseIgnoreErrorsUsingAsyncAwait(promises) {
         return new Promise((resolve, reject) => {
-            if (!Array.isArray(promises)) {
-                return reject('promises muszą być tablicą');
-            }
-
-            const results = [];
-            let completedPromises = 0;
-
-            if (!promises.length) {
-                resolve(results);
-            }
-
-            promises.forEach((promise) => {
-                Promise.resolve(promise)
-                    .then((result) => {
-                        results.push(result);
-                        completedPromises++;
-
-                        if (completedPromises === promises.length) {
-                            resolve(results);
-                        }
-                    })
-                    .catch((error) => {
-                        completedPromises++;
-                        console.log('Catch error in promiseIgnoreErrors: ', error)
-                    });
-            });
+            // if (!Array.isArray(promises)) {
+            //     return reject('promises muszą być tablicą');
+            // }
+            //
+            // const results = [];
+            // let completedPromises = 0;
+            //
+            // if (!promises.length) {
+            //     resolve(results);
+            // }
+            //
+            // promises.forEach((promise) => {
+            //     Promise.resolve(promise)
+            //         .then((result) => {
+            //             results.push(result);
+            //             completedPromises++;
+            //
+            //             if (completedPromises === promises.length) {
+            //                 resolve(results);
+            //             }
+            //         })
+            //         .catch((error) => {
+            //             completedPromises++;
+            //             console.log('Catch error in promiseIgnoreErrors: ', error)
+            //         });
+            // });
         });
     }
 
