@@ -6,6 +6,7 @@ import { PromiseAllComponent } from 'src/promises/promise-all.component';
 import { PromiseIgnoreErrorsComponent } from 'src/promises/promise-ignore-errors.component';
 import { PromiseRaceComponent } from 'src/promises/promise-race.component';
 import { PromiseLastComponent } from 'src/promises/promise-last.component';
+import { RecursivePromiseComponent } from "../promises/recursive-promise.component";
 
  
 
@@ -16,7 +17,8 @@ import { PromiseLastComponent } from 'src/promises/promise-last.component';
     PromiseAllComponent,
     PromiseIgnoreErrorsComponent,
     PromiseRaceComponent,
-    PromiseLastComponent
+    PromiseLastComponent,
+    RecursivePromiseComponent
   ],
 
   imports: [
@@ -30,4 +32,3 @@ import { PromiseLastComponent } from 'src/promises/promise-last.component';
 
 export class AppModule { }
 
- 
